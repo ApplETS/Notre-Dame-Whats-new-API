@@ -33,7 +33,6 @@ class UsersController (override val kodein: Kodein) : KodeinAware {
 
             post ("/users"){
                 val principal = call.principal<User>()
-                
                 call.respond(service.addNewUser(call.receive<UserRegistration>()))
             }}
 

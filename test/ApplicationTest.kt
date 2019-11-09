@@ -1,6 +1,7 @@
 package ca.estmtl.applets.notre_dame
 
-import ca.etsmtl.applets.notre_dame.module
+
+import ca.etsmtl.applets.notre_dame.main
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.request.*
@@ -14,13 +15,5 @@ import kotlin.test.*
 import io.ktor.server.testing.*
 
 class ApplicationTest {
-    @Test
-    fun testRoot() {
-        withTestApplication({ module() }) {
-            handleRequest(HttpMethod.Get, "/").apply {
-                assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals("HELLO WORLD!", response.content)
-            }
-        }
-    }
+    //@Test
 }
