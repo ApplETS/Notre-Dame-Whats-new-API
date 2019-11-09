@@ -1,48 +1,22 @@
 package ca.etsmtl.applets.notre_dame
 
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.request.*
-import io.ktor.features.*
-import io.ktor.routing.*
-import io.ktor.http.*
-import io.ktor.auth.*
-import com.fasterxml.jackson.databind.*
-import io.ktor.jackson.*
+import ca.etsmtl.applets.notre_dame.repository.UsersRepo
+import ca.etsmtl.applets.notre_dame.server.Server
+import org.kodein.di.Kodein
+import org.kodein.di.direct
+import org.kodein.di.generic.bind
+import org.kodein.di.generic.eagerSingleton
+import org.kodein.di.generic.instance
+import org.kodein.di.generic.singleton
+import org.litote.kmongo.KMongo
 
-fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+fun main(args: Array<String>) {
 
-@Suppress("unused") // Referenced in application.conf
-@kotlin.jvm.JvmOverloads
-fun Application.module(testing: Boolean = false) {
-    install(CORS) {
-        method(HttpMethod.Options)
-        method(HttpMethod.Put)
-        method(HttpMethod.Delete)
-        method(HttpMethod.Patch)
-        header(HttpHeaders.Authorization)
-        header("MyCustomHeader")
-        allowCredentials = true
-        anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
+    val kodein = Kodein {
+        bind("mongoClient") from singleton { KMongo.createClient() }
+        bind<Server>() with eagerSingleton { Server(kodein) }
+        bind(tag = "usersRepo") from singleton { UsersRepo(instance("mongoClient")) }
     }
-
-    install(Authentication) {
-    }
-
-    install(ContentNegotiation) {
-        jackson {
-            enable(SerializationFeature.INDENT_OUTPUT)
-        }
-    }
-
-    routing {
-        get("/") {
-            call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
-        }
-
-        get("/json/jackson") {
-            call.respond(mapOf("hello" to "world"))
-        }
-    }
+    var app: Server = kodein.direct.instance()
+    app.startServer()
 }
-
