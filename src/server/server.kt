@@ -15,6 +15,7 @@ import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.features.StatusPages
 import io.ktor.jackson.jackson
+import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.kodein.di.Kodein
@@ -28,6 +29,7 @@ import org.slf4j.event.Level
 
 val serverLogger: Logger = LoggerFactory.getLogger("Server")
 
+@UseExperimental(KtorExperimentalLocationsAPI::class)
 class Server (override val kodein: Kodein) : KodeinAware {
     val config = HoconApplicationConfig(ConfigFactory.load())
     val port = config.property("ktor.deployment.port").getString().toInt()

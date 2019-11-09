@@ -1,0 +1,5 @@
+{"_id":"c47a119f-4cfb-49d0-828a-7005454bca8e","password":"$2a$10$yxgQH8rBdbTrv1rGOk2GGOafoQ1M3aiDuh5TSrW7VdnbiRHxyjF/G","role":"ADMIN","token":"","userName":"testUser"}
+{"_id":{"$oid":"5db465aea5280828ec6cc72e"},"password":"$2a$10$4OULEt.8zmz/24XnAugIzecAMSh3RrnF1Zzc6UvmY0pmvGZ.fS2NO","role":"ADMIN","token":"","userName":"testUser2"}
+{"_id":{"$oid":"5db47885a528082d903cce83"},"password":"$2a$10$KoolHCkOIH6BCmP/IXy2J.dNPKuvVXgU9Z9JQ60Iaxs4E3XjzSZby","role":"USER","token":"","userName":"testUser32"}
+{"_id":{"$oid":"5dc223a6b7ab8e3da03a680e"},"password":"$2a$10$jnnl9DWsNPQv6/Y1ltz.PeDII0ogih1UOS/RNWZOJN4PzYrIOTqN.","role":"USER","token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBdXRoZW50aWNhdGlvbiIsInJvbGUiOiJVU0VSIiwiaXNzIjoiYXBsZXRzLXdoYXRzTmV3LUFwaSIsImlkIjoiNWRjMjIzYTZiN2FiOGUzZGEwM2E2ODBlIiwidXNlck5hbWUiOiJ0ZXN0VXNlcjMyNCIsImV4cCI6MTU3MzQwNTY4MX0.eWlaWa2obzau-gPqA0q1wN3iujAYWWj5nGKOXWJ-LqU","userName":"testUser324"}
+{"_id":{"$oid":"5dc6f3e5a5280810582f2eb0"},"password":"$2a$10$sE0vF8RprG9pqm886.Krc.N3JyHDXiPaGwi3Dn3X8zO.GrYEqWvvK","role":"USER","token":"","userName":"testUser4"}

@@ -12,6 +12,7 @@ import org.kodein.di.KodeinAware
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.auth.authenticate
+import io.ktor.auth.principal
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.routing
@@ -31,6 +32,8 @@ class UsersController (override val kodein: Kodein) : KodeinAware {
             }
 
             post ("/users"){
+                val principal = call.principal<User>()
+                
                 call.respond(service.addNewUser(call.receive<UserRegistration>()))
             }}
 
