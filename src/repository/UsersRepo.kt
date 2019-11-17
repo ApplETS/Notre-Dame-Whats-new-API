@@ -4,12 +4,12 @@ import ca.etsmtl.applets.notre_dame.model.User
 import ca.etsmtl.applets.notre_dame.model.UserProfile
 import ca.etsmtl.applets.notre_dame.utils.Property
 import com.mongodb.MongoClient
+import com.mongodb.client.model.UpdateOneModel
 import com.mongodb.client.model.Updates
+import com.mongodb.client.result.DeleteResult
 import com.mongodb.client.result.UpdateResult
-import org.litote.kmongo.eq
-import org.litote.kmongo.findOne
-import org.litote.kmongo.getCollection
-import org.litote.kmongo.set
+import org.bson.conversions.Bson
+import org.litote.kmongo.*
 
 class UsersRepo (val client: MongoClient) {
     val databaseName  = Property["db.name"]
@@ -37,8 +37,27 @@ class UsersRepo (val client: MongoClient) {
         return usersCollection.findOne(User::userName eq userName)
     }
 
+    fun findById ( id : Id<User>) : User?
+    {
+        return usersCollection.findOne(User::_id eq id)
+    }
+
     fun updateUserToken( user :User): UpdateResult
     {
-        return usersCollection.updateOne( User::id eq user.id, Updates.set("token", user.token))
+        return usersCollection.updateOne( User::_id eq user._id, Updates.set("token", user.token))
+
+    }
+
+    fun deleteUserById ( id : Id<User>) : DeleteResult
+    {
+        return usersCollection.deleteOne(User ::_id eq id)
+    }
+
+    fun updateUser (user: User) : UpdateResult
+    {
+        var list =mutableListOf<Bson>()
+        list.add( Updates.set("userName", user.userName))
+        list.add(Updates.set("role",  user.role))
+        return usersCollection.updateOne (user, updateOnlyNotNullProperties = true)
     }
 }

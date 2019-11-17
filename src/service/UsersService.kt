@@ -6,7 +6,14 @@ import ca.etsmtl.applets.notre_dame.model.UserProfile
 import ca.etsmtl.applets.notre_dame.model.UserRegistration
 import ca.etsmtl.applets.notre_dame.repository.UsersRepo
 import ca.etsmtl.applets.notre_dame.utils.BcryptHasher
+import com.mongodb.client.result.DeleteResult
 import com.mongodb.client.result.UpdateResult
+import org.bson.types.ObjectId
+import org.litote.kmongo.Id
+import org.litote.kmongo.MongoId
+import org.litote.kmongo.id.toId
+import org.litote.kmongo.newId
+import java.util.*
 
 class UsersService ( val repo : UsersRepo) {
 
@@ -26,6 +33,11 @@ class UsersService ( val repo : UsersRepo) {
         return repo.getAllUsers()
     }
 
+    fun getUser (id :String) : User?
+    {
+        return repo.findById(ObjectId(id).toId())
+    }
+
     fun findByUsername( userName : String) : User?
     {
         return repo.findByUserName(userName)
@@ -34,5 +46,16 @@ class UsersService ( val repo : UsersRepo) {
     fun updateUserToken ( user : User) : UpdateResult
     {
         return repo.updateUserToken(user)
+    }
+
+    fun deleteUserById ( id : String) : DeleteResult
+    {
+        return repo.deleteUserById(ObjectId(id).toId())
+    }
+
+    fun updateUser(userPatch : User, id : String) : UpdateResult
+    {
+        userPatch.copy(_id =ObjectId(id).toId())
+        return repo.updateUser(userPatch)
     }
 }

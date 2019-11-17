@@ -21,17 +21,17 @@ val common = Kodein.Module(name = "common") {
 }
 
 /*** WhatsNew********************************/
-@UseExperimental(KtorExperimentalLocationsAPI::class)
+@UseExperimental(KtorExperimentalLocationsAPI::class, KtorExperimentalAPI::class)
 val whatsNewRepo = Kodein.Module(name = "whatsNewRepo") {
     bind(tag = "whatsNewRepo") from singleton { WhatsNewRepo(instance("mongoClient")) }
 }
 
-@UseExperimental(KtorExperimentalAPI::class)
+@UseExperimental(KtorExperimentalAPI::class, KtorExperimentalLocationsAPI::class)
 val whatsNewService = Kodein.Module(name = "whatsNewService") {
     bind(tag = "whatsNewService") from singleton { WhatsNewService(instance("whatsNewRepo")) }
 }
 
-@UseExperimental(KtorExperimentalLocationsAPI::class)
+@UseExperimental(KtorExperimentalLocationsAPI::class, KtorExperimentalAPI::class)
 val whatsNewSController = Kodein.Module(name = "whatsNewSController") {
     bind(tag = "whatsNewSController") from eagerSingleton { WhatsNewController(kodein) }
 }

@@ -39,7 +39,7 @@ dependencies {
     compile "io.ktor:ktor-auth-jwt:$ktor_version"
     compile "io.ktor:ktor-jackson:$ktor_version"
     compile "org.kodein.di:kodein-di-generic-jvm:5.2.0"
-    compile "org.litote.kmongo:kmongo-native:3.8.1"
+    compile "org.litote.kmongo:kmongo:3.11.1"
     compile "org.mindrot:jbcrypt:0.4"
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
     

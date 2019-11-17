@@ -29,7 +29,7 @@ import org.slf4j.event.Level
 
 val serverLogger: Logger = LoggerFactory.getLogger("Server")
 
-@UseExperimental(KtorExperimentalLocationsAPI::class)
+@UseExperimental(KtorExperimentalLocationsAPI::class, io.ktor.util.KtorExperimentalAPI::class)
 class Server (override val kodein: Kodein) : KodeinAware {
     val config = HoconApplicationConfig(ConfigFactory.load())
     val port = config.property("ktor.deployment.port").getString().toInt()

@@ -23,7 +23,6 @@ import java.util.*
 class WhatsNewController (override val kodein: Kodein) : KodeinAware{
     private val app : Application by instance()
     private val service: WhatsNewService by instance("whatsNewService")
-    val logger: Logger = LoggerFactory.getLogger("WhatsNewController")
     init {
         app.routing {
             authenticate {
@@ -46,7 +45,6 @@ class WhatsNewController (override val kodein: Kodein) : KodeinAware{
             }
             get("/whatsNew/en/{version}")  {
                 val version : Float = call.parameters["version"]?.toFloat() ?: 0.0f
-                logger.info("method = Get")
                 call.respond(service.getByVersionEn(version))
             }
 

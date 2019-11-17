@@ -24,9 +24,9 @@ object JwtConfig {
     fun makeToken(user: User): String = JWT.create()
         .withSubject("Authentication")
         .withIssuer(realm)
-        .withClaim("id", user.id.toString())
+        .withClaim("id", user._id.toString())
         .withClaim("userName", user.userName)
-        .withClaim("role", user.role.name)
+        .withClaim("role", user.role?.name)
         .withExpiresAt(getExpiration())
         .sign(algorithm)
 
