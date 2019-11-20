@@ -3,6 +3,8 @@ package ca.etsmtl.applets.notre_dame.repository
 import ca.etsmtl.applets.notre_dame.model.WhatsNew
 import ca.etsmtl.applets.notre_dame.utils.Property
 import com.mongodb.MongoClient
+import com.mongodb.client.result.DeleteResult
+import com.mongodb.client.result.UpdateResult
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.util.KtorExperimentalAPI
 import org.litote.kmongo.*
@@ -44,5 +46,34 @@ class WhatsNewRepo (val client: MongoClient){
     fun getAllWhatsNewFr() : MutableList<WhatsNew>
     {
         return whatsNewCollectionFr.find().toMutableList();
+    }
+
+    fun findByIdEn ( id : Id<WhatsNew>) : WhatsNew?
+    {
+        return whatsNewCollectionEn.findOne(WhatsNew::_id eq id)
+    }
+    fun updateWhatsNewEn ( updatedWhatsNew : WhatsNew) : UpdateResult
+    {
+        return whatsNewCollectionEn.updateOne(updatedWhatsNew)
+    }
+
+    fun findByIdFr ( id : Id<WhatsNew>) : WhatsNew?
+    {
+        return whatsNewCollectionFr.findOne(WhatsNew::_id eq id)
+    }
+
+    fun updateWhatsNewFr ( updatedWhatsNew : WhatsNew) : UpdateResult
+    {
+        return whatsNewCollectionFr.updateOne(updatedWhatsNew)
+    }
+
+    fun deleteWhatsNewEn ( id : Id<WhatsNew>) : DeleteResult
+    {
+        return whatsNewCollectionEn.deleteOne(WhatsNew ::_id eq id)
+    }
+
+    fun deleteWhatsNewFr( id : Id<WhatsNew>) : DeleteResult
+    {
+        return whatsNewCollectionFr.deleteOne(WhatsNew ::_id eq id)
     }
 }

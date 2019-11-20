@@ -1,7 +1,9 @@
 package ca.etsmtl.applets.notre_dame.service
 
 import ca.etsmtl.applets.notre_dame.ApiExceptions.UserAlreadyExists
+import ca.etsmtl.applets.notre_dame.ApiExceptions.UserNotFound
 import ca.etsmtl.applets.notre_dame.model.User
+import ca.etsmtl.applets.notre_dame.model.UserPatch
 import ca.etsmtl.applets.notre_dame.model.UserProfile
 import ca.etsmtl.applets.notre_dame.model.UserRegistration
 import ca.etsmtl.applets.notre_dame.repository.UsersRepo
@@ -9,11 +11,7 @@ import ca.etsmtl.applets.notre_dame.utils.BcryptHasher
 import com.mongodb.client.result.DeleteResult
 import com.mongodb.client.result.UpdateResult
 import org.bson.types.ObjectId
-import org.litote.kmongo.Id
-import org.litote.kmongo.MongoId
 import org.litote.kmongo.id.toId
-import org.litote.kmongo.newId
-import java.util.*
 
 class UsersService ( val repo : UsersRepo) {
 
@@ -53,9 +51,12 @@ class UsersService ( val repo : UsersRepo) {
         return repo.deleteUserById(ObjectId(id).toId())
     }
 
-    fun updateUser(userPatch : User, id : String) : UpdateResult
+    fun updateUser(userPatch : UserPatch, id : String) : UpdateResult
     {
-        userPatch.copy(_id =ObjectId(id).toId())
-        return repo.updateUser(userPatch)
+        var originalUser = this.getUser(id)
+        if (originalUser == null)
+            throw UserNotFound
+        originalUser?.patchUser(userPatch)
+        return repo.updateUser(originalUser)
     }
 }

@@ -3,6 +3,7 @@ package ca.etsmtl.applets.notre_dame.controllers
 import ca.etsmtl.applets.notre_dame.ApiExceptions.UserNotFound
 import ca.etsmtl.applets.notre_dame.model.LoginCredentials
 import ca.etsmtl.applets.notre_dame.model.User
+import ca.etsmtl.applets.notre_dame.model.UserPatch
 import ca.etsmtl.applets.notre_dame.model.UserRegistration
 import ca.etsmtl.applets.notre_dame.service.UsersService
 import ca.etsmtl.applets.notre_dame.utils.BcryptHasher
@@ -19,7 +20,6 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.*
 import org.kodein.di.generic.instance
-import org.litote.kmongo.toId
 
 class UsersController(override val kodein: Kodein) : KodeinAware {
     private val app: Application by instance()
@@ -66,7 +66,7 @@ class UsersController(override val kodein: Kodein) : KodeinAware {
                     if (checkIfAdmin(call.principal<User>())) {
                         val id = call.parameters["id"]?.toString()
                         if (id != null) {
-                            call. respond(service.updateUser(call.receive<User>(), id))
+                            call. respond(service.updateUser(call.receive<UserPatch>(), id))
                         } else
                             call.respond(HttpStatusCode.BadRequest)
                     } else

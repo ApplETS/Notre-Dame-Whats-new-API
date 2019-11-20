@@ -4,11 +4,9 @@ import ca.etsmtl.applets.notre_dame.model.User
 import ca.etsmtl.applets.notre_dame.model.UserProfile
 import ca.etsmtl.applets.notre_dame.utils.Property
 import com.mongodb.MongoClient
-import com.mongodb.client.model.UpdateOneModel
 import com.mongodb.client.model.Updates
 import com.mongodb.client.result.DeleteResult
 import com.mongodb.client.result.UpdateResult
-import org.bson.conversions.Bson
 import org.litote.kmongo.*
 
 class UsersRepo (val client: MongoClient) {
@@ -55,9 +53,6 @@ class UsersRepo (val client: MongoClient) {
 
     fun updateUser (user: User) : UpdateResult
     {
-        var list =mutableListOf<Bson>()
-        list.add( Updates.set("userName", user.userName))
-        list.add(Updates.set("role",  user.role))
-        return usersCollection.updateOne (user, updateOnlyNotNullProperties = true)
+        return usersCollection.updateOne(user)
     }
 }

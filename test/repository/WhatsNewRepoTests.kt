@@ -21,7 +21,7 @@ class WhatsNewRepoTests {
     @Test
     fun getByVersion() {
         val repository: WhatsNewRepo by context.instance("whatsNewRepo")
-        val results = repository.getByVersionEn(1.0f)
+        val results = repository.getByVersionEn(1.5f)
         assertTrue { results.isNotEmpty() }
     }
 }
