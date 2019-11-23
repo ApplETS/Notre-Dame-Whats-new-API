@@ -1,10 +1,7 @@
 package ca.etsmtl.applets.notre_dame.controllers
 
 import ca.etsmtl.applets.notre_dame.ApiExceptions.UserNotFound
-import ca.etsmtl.applets.notre_dame.model.LoginCredentials
-import ca.etsmtl.applets.notre_dame.model.User
-import ca.etsmtl.applets.notre_dame.model.UserPatch
-import ca.etsmtl.applets.notre_dame.model.UserRegistration
+import ca.etsmtl.applets.notre_dame.model.*
 import ca.etsmtl.applets.notre_dame.service.UsersService
 import ca.etsmtl.applets.notre_dame.utils.BcryptHasher
 import ca.etsmtl.applets.notre_dame.utils.JwtConfig
@@ -80,7 +77,8 @@ class UsersController(override val kodein: Kodein) : KodeinAware {
                 BcryptHasher.checkPassword(credentials.password, user)
                 val token = JwtConfig.makeToken(user)
                 service.updateUserToken(user.copy(token = token))
-                call.respond(token + " " + service.updateUserToken(user.copy(token = token)))
+                val toReturn = LoginReturnedObj (token, user.userName, user.role )
+                call.respond(toReturn )
             }
         }
     }
