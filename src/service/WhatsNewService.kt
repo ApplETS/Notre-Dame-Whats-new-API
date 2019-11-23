@@ -51,9 +51,8 @@ class WhatsNewService (val repo : WhatsNewRepo) {
     fun updateWhatsNewEn (patchedWhatsNewEn : WhatsNewPatch, id : String) : UpdateResult
     {
         var whatsNewToUpdate = this.getWhatsNewEn(id)
-        if (whatsNewToUpdate == null)
-            throw NotFoundException("Bad id")
-        whatsNewToUpdate?.patchWhatsNew(patchedWhatsNewEn)
+        whatsNewToUpdate ?:throw NotFoundException("Bad id")
+        whatsNewToUpdate.patchWhatsNew(patchedWhatsNewEn)
         return repo.updateWhatsNewEn(whatsNewToUpdate)
     }
 
@@ -66,9 +65,8 @@ class WhatsNewService (val repo : WhatsNewRepo) {
     fun updateWhatsNewFr (patchedWhatsNewFr : WhatsNewPatch, id : String) : UpdateResult
     {
         var whatsNewToUpdate = this.getWhatsNewFr(id)
-        if (whatsNewToUpdate == null)
-            throw NotFoundException("Bad id")
-        whatsNewToUpdate?.patchWhatsNew(patchedWhatsNewFr)
+        whatsNewToUpdate ?: throw NotFoundException("Bad id")
+        whatsNewToUpdate.patchWhatsNew(patchedWhatsNewFr)
         return repo.updateWhatsNewFr(whatsNewToUpdate)
     }
 

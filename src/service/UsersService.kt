@@ -54,9 +54,8 @@ class UsersService ( val repo : UsersRepo) {
     fun updateUser(userPatch : UserPatch, id : String) : UpdateResult
     {
         var originalUser = this.getUser(id)
-        if (originalUser == null)
-            throw UserNotFound
-        originalUser?.patchUser(userPatch)
+        originalUser ?: throw UserNotFound
+        originalUser.patchUser(userPatch)
         return repo.updateUser(originalUser)
     }
 }
