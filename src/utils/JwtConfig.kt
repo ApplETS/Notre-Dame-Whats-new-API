@@ -26,7 +26,7 @@ object JwtConfig {
         .withIssuer(realm)
         .withClaim("id", user._id.toString())
         .withClaim("userName", user.userName)
-        .withClaim("role", user.role?.name)
+        .withClaim("role", user.role.name)
         .withExpiresAt(getExpiration())
         .sign(algorithm)
 
