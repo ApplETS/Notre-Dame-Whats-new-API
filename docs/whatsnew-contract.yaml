@@ -1,0 +1,430 @@
+openapi: 3.0.1
+info:
+  title: What's New API
+  version: 0.0.1
+  description: Service contract of the API. This API is used by the projet Notre-Dame of App|ETS.
+  contact:
+    email: applets@etsmtl.net
+tags: 
+ - name: Users
+ - name: WhatsNew
+
+paths:
+  /users:
+    get:
+      summary: Get all the users.
+      description: You need to be authenticated as admin.
+      tags: 
+        - Users
+      responses:
+        200:
+          description: List of all the user. Need to be admin to access this.
+          content:
+            json/application:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserProfile'
+        403:
+          description: User not authenticated or User authenticated isn't admin.
+    post:
+      summary: Add a new user.
+      description: You need to be authenticated as admin.
+      tags:
+        - Users
+      parameters: 
+        - name: user
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UserRegistration'
+      responses:
+        201:
+          description: User created. Need to be admin to access this.
+          content:
+            json/application:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserProfile'
+        403:
+          description: User not authenticated or User authenticated isn't admin
+  /users/{id}:
+    get:
+      summary: Get a specific user. Need to be authenticated as admin.
+      tags: 
+        - Users
+      parameters: 
+        - name: id
+          in: path
+          description: ID of the user wanted.
+          schema:
+            type: string
+          required: true
+          example: 5db465aea5280828ec6cc72e
+      responses:
+        200:
+          description: User wanted.
+          content:
+            json/application:
+              schema:
+                $ref: '#/components/schemas/User'
+        404:
+          description: ID not found.
+        403:
+          description: User not authenticated or not a admin.
+    delete:
+      summary: Delete a specific user.
+      description: You need to be authenticated as admin.
+      tags: 
+        - Users
+      parameters: 
+        - name: id
+          in: path
+          description: ID of the user wanted
+          schema:
+            type: string
+          required: true
+          example: 5db465aea5280828ec6cc72e
+      responses:
+        200:
+          description: User corresponding to the ID have been deleted.
+        404:
+          description: ID not found.
+        403:
+          description: User not authenticated or not a admin.
+    patch:
+      summary: Update a specific user.
+      description: Update a specific user. Need to be logged as admin.
+      tags: 
+        - Users
+      parameters: 
+        - name: id
+          in: path
+          description: ID of the user wanted.
+          schema:
+            type: string
+          required: true
+          example: 5db465aea5280828ec6cc72e
+        - name: user
+          in: query
+          description: Details updated of the user.
+          schema:
+            $ref: '#/components/schemas/UserPatch'
+          required: true
+      responses:
+        200:
+          description: User corresponding to the ID have been updated.
+        404:
+          description: ID not found.
+        403:
+          description: User not authenticated or not a admin.
+  /users/login:
+    post:
+      description: Login the user. Needed to access sensitive data.
+      tags:
+        - Users
+      parameters: 
+        - name: loginCredentials
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/LoginCredentials'
+      responses:
+        200:
+          description: Users logged
+          content:
+            json/application:
+              schema:
+                $ref: '#/components/schemas/LoginReturnObj'
+        401:
+          description: Wrong credentials
+  
+  /whatsNew/{lang}:
+    get:
+      tags: 
+        - WhatsNew
+      summary: Get all the news. Need to be logged.
+      parameters: 
+        - name: lang
+          in: path
+          required: true
+          description: Langue of the news to return.
+          example: en
+          schema:
+            enum: 
+              - fr
+              - en
+      responses:
+        200:
+          description: Array with all the news in the language chosen.
+          content:
+            json/application:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WhatsNew'
+        403:
+          description: User not logged.
+    post:
+      tags: 
+        - WhatsNew
+      summary: Add a news
+      description: Add a news. Need to be logged as Admin
+      parameters: 
+        - name: lang
+          in: path
+          required: true
+          description: Langue of the news to return
+          example: en
+          schema:
+            enum: 
+              - fr
+              - en
+        - name: whatsNew
+          in: query
+          required: true
+          description: News to add
+          schema:
+            $ref: '#/components/schemas/WhatsNew'
+      responses:
+        201:
+          description: News added
+        403:
+          description: User not logged or not a admin.
+  /whatsNew/{lang}/{id}:
+    patch:
+      tags: 
+        - WhatsNew
+      summary: Add a news
+      description: Add a news. Need to be logged as Admin
+      parameters: 
+        - name: lang
+          in: path
+          required: true
+          description: Langue of the news to return
+          example: en
+          schema:
+            enum: 
+              - fr
+              - en
+        - name: id
+          in: path
+          required: true
+          description: ID of the news wanted
+          schema:
+            type: string
+            example: 6db422aea52a08adcc4cb66a
+        - name: whatsNew
+          in: query
+          required: true
+          description: News to add
+          schema:
+            $ref: '#/components/schemas/WhatsNewPatch'
+      responses:
+        200:
+          description: News updated
+          content:
+            json/application:
+              schema:
+                $ref: '#/components/schemas/WhatsNew'
+        403:
+          description: User not logged or not a admin.
+        404:
+          description: News not found.
+    delete:
+      tags: 
+        - WhatsNew
+      summary: Delete a news
+      description: Delete a news. Need to be logged as Admin
+      parameters: 
+        - name: lang
+          in: path
+          required: true
+          description: Langue of the news to return
+          example: en
+          schema:
+            enum: 
+              - fr
+              - en
+        - name: id
+          in: path
+          required: true
+          description: ID of the news wanted
+          schema:
+            type: string
+            example: 6db422aea52a08adcc4cb66a
+      responses:
+        200:
+          description: News deleted
+        403:
+          description: User not logged or not a admin.
+        404:
+          description: News not found
+
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 5db465aea5280828ec6cc72e
+          description: "Id of the user"
+        userName:
+          type: string
+          example: 'apomalyn'
+        role:
+          type: string
+          example: 'admin'
+          description: Role of the user.
+          enum:
+            - admin
+            - user
+            - ""
+        password:
+          type: string
+          example: '006'
+        token:
+          type: string
+          description: Token JWT
+        
+      required:
+      - id
+      - userName
+      - role
+      - password
+      - token
+    LoginCredentials:
+      type: object
+      description: Credentials of a user
+      properties:
+        userName:
+          type: string
+          example: apomalyn
+        password:
+          type: string
+      required:
+        - userName
+        - password
+    LoginReturnObj:
+      type: object
+      description: Response after the login
+      properties:
+        token:
+          type: string
+          description: Token of the session, valid for 24h. There is only one token
+        userName:
+          type: string
+          example: apomalyn
+        role:
+          type: string
+          example: 'admin'
+          description: Role of the user.
+          enum:
+            - admin
+            - user
+            - ""
+      required: 
+        - token
+        - userName
+        - role
+    UserPatch:
+      type: object
+      description: Todo
+      properties:
+        id:
+          type: string
+          example: 5db465aea5280828ec6cc72e
+          description: "Id of the user"
+        userName:
+          type: string
+          example: 'apomalyn'
+        role:
+          type: string
+          example: 'admin'
+          description: Role of the user.
+          enum:
+            - admin
+            - user
+            - ""
+        password:
+          type: string
+          example: '006'
+      required:
+        - id
+    UserProfile:
+      type: object
+      description: Todo
+      properties:
+        id:
+          type: string
+          example: 5db465aea5280828ec6cc72e
+          description: "Id of the user"
+        userName:
+          type: string
+          example: 'apomalyn'
+        role:
+          type: string
+          example: 'admin'
+          description: Role of the user.
+          enum:
+            - admin
+            - user
+            - ""
+        password:
+          type: string
+          example: '006'
+      required:
+        - id
+    UserRegistration:
+      description: User details to registration
+      type: object
+      properties:
+        userName:
+          type: string
+          example: 'apomalyn'
+        role:
+          type: string
+          example: 'admin'
+          description: Role of the user.
+          enum:
+            - admin
+            - user
+            - ""
+        password:
+          type: string
+          example: '006'
+      required: 
+        - userName
+        - role
+        - password
+        
+    WhatsNew:
+      type: object
+      description: Describe what is new on this version.
+      properties:
+        title:
+          type: string
+          description: Title of the news
+        description:
+          type: string
+          description: Details of the news
+        version:
+          type: number
+          description: Version of the application that contains the news
+      required: 
+        - title
+        - description
+        - version
+    WhatsNewPatch:
+      type: object
+      description: Update version of the news
+      properties:
+        title:
+          type: string
+          description: Updated title of the news
+        description:
+          type: string
+          description: Updated details of the news
