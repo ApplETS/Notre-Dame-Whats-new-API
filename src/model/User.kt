@@ -23,8 +23,9 @@ data class User(
 
     init{
         for (prop in User::class.memberProperties){
+            var propName = prop.name
             var propVal = prop.get(this)
-            if ( propVal is String )
+            if ( propVal is String && propName != "token" )
             {
                 if (propVal.toString().isBlank())
                     throw BadUserFormat
