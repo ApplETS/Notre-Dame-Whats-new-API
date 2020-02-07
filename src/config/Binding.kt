@@ -6,6 +6,9 @@ import ca.etsmtl.applets.notre_dame.repository.UsersRepo
 import ca.etsmtl.applets.notre_dame.repository.WhatsNewRepo
 import ca.etsmtl.applets.notre_dame.service.UsersService
 import ca.etsmtl.applets.notre_dame.service.WhatsNewService
+import ca.etsmtl.applets.notre_dame.utils.Property
+import com.mongodb.MongoCredential
+import com.mongodb.ServerAddress
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.util.KtorExperimentalAPI
 import org.kodein.di.Kodein
@@ -17,6 +20,12 @@ import org.litote.kmongo.KMongo
 
 /*** MongoDb********************************/
 val common = Kodein.Module(name = "common") {
+    /*val databaseName  = Property["db.name"]
+    val databaseUser = Property["db.usernameDb"]
+    val databasePass = Property["db.password"]
+    val credentialList =  ArrayList<MongoCredential>();
+    credentialList.add(MongoCredential.createCredential(databaseUser,databaseName,databasePass.toCharArray()))
+    bind("mongoClient") from singleton { KMongo.createClient( ServerAddress(),credentialList)}*/
     bind("mongoClient") from singleton { KMongo.createClient() }
 }
 
