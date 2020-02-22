@@ -1,6 +1,7 @@
 package ca.etsmtl.applets.notre_dame.model
 
-import ca.etsmtl.applets.notre_dame.ApiExceptions.BadUserFormat
+import ca.etsmtl.applets.notre_dame.ApiExceptions.BadWhatsNewFormat
+import io.ktor.features.BadRequestException
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
 import org.litote.kmongo.Id
@@ -21,12 +22,14 @@ data class WhatsNew(
             if ( propVal is String )
             {
                 if (propVal.toString().isBlank())
-                    throw BadUserFormat
+                    throw BadWhatsNewFormat
             }
         }
     }
 
     fun patchWhatsNew(other: WhatsNewPatch)  {
+        if( other.title.isNullOrBlank() && other.description.isNullOrBlank() )
+            throw BadRequestException("Empty Patch is not allowed")
         if (!other.title.isNullOrBlank())
             this.title =other.title!!
         if (!other.description.isNullOrBlank())
