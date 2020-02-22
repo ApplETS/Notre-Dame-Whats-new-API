@@ -4,6 +4,7 @@ import ca.etsmtl.applets.notre_dame.ApiExceptions.BadUserFormat
 import ca.etsmtl.applets.notre_dame.utils.BcryptHasher
 import ca.etsmtl.applets.notre_dame.utils.Roles
 import io.ktor.auth.Principal
+import io.ktor.features.BadRequestException
 import io.ktor.util.KtorExperimentalAPI
 import org.bson.codecs.pojo.annotations.BsonId
 import org.litote.kmongo.Id
@@ -30,6 +31,8 @@ data class User(
                 if (propVal.toString().isBlank())
                     throw BadUserFormat
             }
+            else if (propName == "role" && propVal==null)
+                throw BadUserFormat
         }
     }
 
@@ -38,7 +41,9 @@ data class User(
     }
 
     fun patchUser(other: UserPatch) {
-        if (!other.userName.isNullOrBlank())
+        if( other.userName.isNullOrBlank() && other.role==null &&other.password.isNullOrBlank() )
+            throw BadRequestException("Empty Patch is not allowed")
+            if (!other.userName.isNullOrBlank())
             this.userName = other.userName!!
         if (other.role != null)
             this.role = other.role!!
