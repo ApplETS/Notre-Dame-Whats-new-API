@@ -26,7 +26,9 @@ val common = Kodein.Module(name = "common") {
     val credentialList =  ArrayList<MongoCredential>();
     credentialList.add(MongoCredential.createCredential(databaseUser,databaseName,databasePass.toCharArray()))
     bind("mongoClient") from singleton { KMongo.createClient( ServerAddress(),credentialList)}*/
-    bind("mongoClient") from singleton { KMongo.createClient() }
+    val dbHost =Property["db.host"]
+    val dbPort: Int = Property["db.port"].toInt()
+    bind("mongoClient") from singleton { KMongo.createClient(dbHost,dbPort) }
 }
 
 /*** WhatsNew********************************/
