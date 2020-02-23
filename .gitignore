@@ -1,3 +1,4 @@
+/.devcontainer
 /.gradle
 /.idea
 /out
@@ -5,6 +6,7 @@
 *.iml
 *.ipr
 *.iws
+/data
 
 
 # Created by https://www.gitignore.io/api/kotlin,intellij+all
