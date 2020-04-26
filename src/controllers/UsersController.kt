@@ -19,8 +19,8 @@ import io.ktor.routing.*
 import org.kodein.di.generic.instance
 
 class UsersController(override val kodein: Kodein) : KodeinAware {
-    private val app: Application by instance()
-    private val service: UsersService by instance("usersService")
+    private val app: Application by instance<Application>()
+    private val service: UsersService by instance<UsersService>("usersService")
 
     init {
         app.routing {

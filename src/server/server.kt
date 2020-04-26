@@ -31,8 +31,8 @@ val serverLogger: Logger = LoggerFactory.getLogger("Server")
 
 @UseExperimental(KtorExperimentalLocationsAPI::class, io.ktor.util.KtorExperimentalAPI::class)
 class Server (override val kodein: Kodein) : KodeinAware {
-    val config = HoconApplicationConfig(ConfigFactory.load())
-    val port = config.property("ktor.deployment.port").getString().toInt()
+    private val config = HoconApplicationConfig(ConfigFactory.load())
+    private val port = config.property("ktor.deployment.port").getString().toInt()
 
     public fun startServer() = embeddedServer(Netty, port = port) {
         kodeinApplication {
@@ -56,7 +56,7 @@ class Server (override val kodein: Kodein) : KodeinAware {
     }
 
     fun Application.module() {
-        val repo: UsersRepo by instance("usersRepo")
+        val repo: UsersRepo by instance<UsersRepo>("usersRepo")
 
         install(CallLogging) {
             level = Level.INFO

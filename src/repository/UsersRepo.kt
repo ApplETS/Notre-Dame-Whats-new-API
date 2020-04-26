@@ -9,10 +9,10 @@ import com.mongodb.client.result.DeleteResult
 import com.mongodb.client.result.UpdateResult
 import org.litote.kmongo.*
 
-class UsersRepo (val client: MongoClient) {
-    val databaseName  = Property["db.name"]
-    val usersCollName = Property["db.usersCollection"]
-    val usersCollection = client.getDatabase(databaseName).getCollection<User>(usersCollName)
+class UsersRepo (private val client: MongoClient) {
+    private val databaseName  = Property["db.name"]
+    private val usersCollName = Property["db.usersCollection"]
+    private val usersCollection = client.getDatabase(databaseName).getCollection<User>(usersCollName)
 
     fun addUser ( userOb : User) :Unit
     {
