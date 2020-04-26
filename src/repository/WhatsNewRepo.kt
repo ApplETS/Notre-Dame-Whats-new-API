@@ -11,14 +11,12 @@ import org.litote.kmongo.*
 
 @KtorExperimentalLocationsAPI
 @KtorExperimentalAPI
-class WhatsNewRepo (val client: MongoClient){
-      val databaseName  = Property["db.name"]
-      val whatsNewCollNameEn =Property["db.whatsNewCollectionEn"]
-      val whatsNewCollNameFr =Property["db.whatsNewCollectionFr"]
-      val whatsNewCollectionEn = client.getDatabase(databaseName).getCollection<WhatsNew>(whatsNewCollNameEn)
-      val whatsNewCollectionFr = client.getDatabase(databaseName).getCollection<WhatsNew>(whatsNewCollNameFr)
+class WhatsNewRepo (private val client: MongoClient){
+      private val databaseName  = Property["db.name"]
+      private val whatsNewCollectionEn = client.getDatabase(databaseName).getCollection<WhatsNew>(Property["db.whatsNewCollectionEn"])
+      private val whatsNewCollectionFr = client.getDatabase(databaseName).getCollection<WhatsNew>(Property["db.whatsNewCollectionFr"])
 
-    fun getByVersionEn( version : Float) : MutableList<WhatsNew>
+    fun getByVersionEn( version : String) : MutableList<WhatsNew>
     {
         return whatsNewCollectionEn.find(WhatsNew::version eq version).toMutableList()
     }
@@ -33,7 +31,7 @@ class WhatsNewRepo (val client: MongoClient){
         return whatsNewCollectionEn.find().toMutableList();
     }
 
-    fun getByVersionFr( version : Float) : MutableList<WhatsNew>
+    fun getByVersionFr( version : String) : MutableList<WhatsNew>
     {
         return whatsNewCollectionFr.find(WhatsNew::version eq version).toMutableList()
     }
@@ -76,4 +74,17 @@ class WhatsNewRepo (val client: MongoClient){
     {
         return whatsNewCollectionFr.deleteOne(WhatsNew ::_id eq id)
     }
+
+    fun getRangeEn(from: Double, to: Double): List<WhatsNew> {
+     return whatsNewCollectionEn.find("{paddedVersion: {${MongoOperator.gt}:$from, ${MongoOperator.lt}:$to}}").toMutableList().filter { whatsNew ->
+         whatsNew.paddedVersion.rem(10.0) ==0.0
+     }
+    }
+
+    fun getRangeFr(from: Double, to: Double): List<WhatsNew> {
+        return whatsNewCollectionFr.find("paddedVersion: {${MongoOperator.gt}:$from, ${MongoOperator.lt}:$to}").toMutableList().filter { whatsNew ->
+            whatsNew.paddedVersion.rem(10.0) ==0.0
+        }
+    }
+
 }

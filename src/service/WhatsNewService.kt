@@ -2,6 +2,7 @@ package ca.etsmtl.applets.notre_dame.service
 
 import ca.etsmtl.applets.notre_dame.model.WhatsNew
 import ca.etsmtl.applets.notre_dame.model.WhatsNewPatch
+import ca.etsmtl.applets.notre_dame.model.WhatsNewToReturn
 import ca.etsmtl.applets.notre_dame.repository.WhatsNewRepo
 import com.mongodb.client.result.DeleteResult
 import com.mongodb.client.result.UpdateResult
@@ -15,32 +16,52 @@ import org.litote.kmongo.id.toId
 @KtorExperimentalLocationsAPI
 class WhatsNewService (val repo : WhatsNewRepo) {
 
-    fun getByVersionEn ( version : Float) : MutableList<WhatsNew>
+    fun getByVersionEn ( version : String) : MutableList<WhatsNewToReturn>
     {
-        return repo.getByVersionEn(version)
+        val foundObjs = repo.getByVersionEn(version)
+        var objectsToReturn :MutableList<WhatsNewToReturn> = ArrayList<WhatsNewToReturn>()
+        foundObjs.forEach {
+            objectsToReturn.add(it.toWhatsNewToReturn())
+        }
+        return objectsToReturn
     }
 
     fun addNewWhatsNewEn ( whatsNewOb : WhatsNew) : Unit{
         return repo.addWhatNewEn(whatsNewOb)
     }
 
-    fun getAllWhatsNewEn () :MutableList<WhatsNew>
+    fun getAllWhatsNewEn () :MutableList<WhatsNewToReturn>
     {
-        return repo.getAllWhatsNewEn()
+        val foundObjs = repo.getAllWhatsNewEn()
+        var objectsToReturn :MutableList<WhatsNewToReturn> = ArrayList<WhatsNewToReturn>()
+        foundObjs.forEach {
+            objectsToReturn.add(it.toWhatsNewToReturn())
+        }
+        return objectsToReturn
     }
 
-    fun getByVersionFr ( version : Float) : MutableList<WhatsNew>
+    fun getByVersionFr ( version : String) : MutableList<WhatsNewToReturn>
     {
-        return repo.getByVersionFr(version)
+        val foundObjs = repo.getByVersionFr(version)
+        var objectsToReturn :MutableList<WhatsNewToReturn> = ArrayList<WhatsNewToReturn>()
+        foundObjs.forEach {
+            objectsToReturn.add(it.toWhatsNewToReturn())
+        }
+        return objectsToReturn
     }
 
     fun addNewWhatsNewFr ( whatsNewOb : WhatsNew) : Unit{
         return repo.addWhatNewFr(whatsNewOb)
     }
 
-    fun getAllWhatsNewFr () :MutableList<WhatsNew>
+    fun getAllWhatsNewFr () :MutableList<WhatsNewToReturn>
     {
-        return repo.getAllWhatsNewFr()
+        val foundObjs = repo.getAllWhatsNewFr()
+        var objectsToReturn :MutableList<WhatsNewToReturn> = ArrayList<WhatsNewToReturn>()
+        foundObjs.forEach {
+            objectsToReturn.add(it.toWhatsNewToReturn())
+        }
+        return objectsToReturn
     }
 
     fun getWhatsNewEn (id :String) : WhatsNew?
@@ -78,5 +99,23 @@ class WhatsNewService (val repo : WhatsNewRepo) {
     fun deleteWhatNewFr( id : String) : DeleteResult
     {
         return repo.deleteWhatsNewFr(ObjectId(id).toId())
+    }
+
+    fun getByVersionRangeEn(paddedVersionFrom: Double,paddedVersionTo: Double ): MutableList<WhatsNewToReturn> {
+        val foundObjs = repo.getRangeEn(paddedVersionFrom,paddedVersionTo)
+        var objectsToReturn :MutableList<WhatsNewToReturn> = ArrayList<WhatsNewToReturn>()
+        foundObjs.forEach {
+            objectsToReturn.add(it.toWhatsNewToReturn())
+        }
+        return objectsToReturn
+    }
+
+    fun getByVersionRangeFr(paddedVersionFrom: Double , paddedVersionTo: Double): MutableList<WhatsNewToReturn> {
+        val foundObjs = repo.getRangeFr(paddedVersionFrom,paddedVersionTo)
+        var objectsToReturn :MutableList<WhatsNewToReturn> = ArrayList<WhatsNewToReturn>()
+        foundObjs.forEach {
+            objectsToReturn.add(it.toWhatsNewToReturn())
+        }
+        return objectsToReturn
     }
 }

@@ -14,7 +14,8 @@ data class WhatsNew(
     val _id : Id<WhatsNew> = newId(),
     var title : String,
     var description : String,
-    val version : Float ){
+    val version : String,
+    var paddedVersion : Double){
 
     init{
         for (prop in WhatsNew::class.memberProperties){
@@ -35,4 +36,28 @@ data class WhatsNew(
         if (!other.description.isNullOrBlank())
             this.description =other.description!!
     }
+
+    fun set(version: String)
+    {
+        this.paddedVersion = addPaddingToVersion(version)
+    }
+
+    fun toWhatsNewToReturn(): WhatsNewToReturn
+    {
+        return WhatsNewToReturn(this._id.toString(),this.title,this.description,this.version)
+    }
+}
+
+fun addPaddingToVersion(version :String): Double
+{
+    var str =""
+    var splittedVersion = version.split('.')
+    splittedVersion.forEach {
+       for( i in 1.. 4-it.length)
+       {
+           str+=0
+       }
+        str+=it
+    }
+    return str.toDouble()
 }

@@ -2,6 +2,7 @@ package ca.etsmtl.applets.notre_dame.controllers
 
 import ca.etsmtl.applets.notre_dame.model.WhatsNew
 import ca.etsmtl.applets.notre_dame.model.WhatsNewPatch
+import ca.etsmtl.applets.notre_dame.model.addPaddingToVersion
 import ca.etsmtl.applets.notre_dame.service.WhatsNewService
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -19,8 +20,8 @@ import io.ktor.routing.*
 @KtorExperimentalLocationsAPI
 @io.ktor.util.KtorExperimentalAPI
 class WhatsNewController(override val kodein: Kodein) : KodeinAware {
-    private val app: Application by instance()
-    private val service: WhatsNewService by instance("whatsNewService")
+    private val app: Application by instance<Application>()
+    private val service: WhatsNewService by instance<WhatsNewService>("whatsNewService")
 
     init {
         app.routing {
@@ -31,6 +32,7 @@ class WhatsNewController(override val kodein: Kodein) : KodeinAware {
 
                 post("/whatsNew/en") {
                     val newWhatsNew = call.receive<WhatsNew>()
+                    newWhatsNew.set(newWhatsNew.version)
                     call.respond(service.addNewWhatsNewEn(newWhatsNew))
                 }
                 patch("/whatsNew/en/{id}") {
@@ -54,6 +56,7 @@ class WhatsNewController(override val kodein: Kodein) : KodeinAware {
 
                 post("/whatsNew/fr") {
                     val newWhatsNew = call.receive<WhatsNew>()
+                    newWhatsNew.set(newWhatsNew.version)
                     call.respond(service.addNewWhatsNewFr(newWhatsNew))
                 }
                 patch("/whatsNew/fr/{id}") {
@@ -72,14 +75,27 @@ class WhatsNewController(override val kodein: Kodein) : KodeinAware {
                         call.respond(HttpStatusCode.BadRequest)
                 }
             }
-            get("/whatsNew/en/{version}") {
-                val version: Float = call.parameters["version"]?.toFloat() ?: 0.0f
-                call.respond(service.getByVersionEn(version))
+            get("/whatsNew/en/{versionTo}") {
+                val versionTo = call.parameters["versionTo"]
+                var params = call.request.queryParameters
+                if(versionTo != null && !params.isEmpty() && params.contains("versionFrom"))
+                {
+                    call.respond(service.getByVersionRangeEn(addPaddingToVersion(params["versionFrom"]!!),addPaddingToVersion(versionTo) ))
+                }
+                else
+                    call.respond(HttpStatusCode.BadRequest)
+
             }
 
-            get("/whatsNew/fr/{version}") {
-                val version: Float = call.parameters["version"]?.toFloat() ?: 0.0f
-                call.respond(service.getByVersionFr(version))
+            get("/whatsNew/fr/{versionTo}") {
+                val versionTo = call.parameters["versionTo"]
+                var params = call.request.queryParameters
+                if(versionTo != null && !params.isEmpty() && params.contains("versionFrom"))
+                {
+                    call.respond(service.getByVersionRangeFr(addPaddingToVersion(params["versionFrom"]!!),addPaddingToVersion(versionTo) ))
+                }
+                else
+                    call.respond(HttpStatusCode.BadRequest)
             }
         }
     }
