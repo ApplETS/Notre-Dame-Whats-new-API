@@ -1,3 +1,4 @@
 runtime: java11
 entrypoint: 'java -jar whats-new-api-0.0.1-all.jar'
+# TODO Find a way to automatically change the version
 service: default

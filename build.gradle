@@ -73,7 +73,7 @@ compileTestKotlin {
 appengine {
     deploy {
         projectId = "whats-new-api"
-        version = 'GCLOUD_CONFIG' // TODO find a way to automate that
+        version = 'GCLOUD_CONFIG'
     }
     stage {
         artifact = "build/libs/$project.name-${project.version}-all.jar"
