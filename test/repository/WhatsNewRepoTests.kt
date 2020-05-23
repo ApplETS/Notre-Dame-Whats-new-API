@@ -1,8 +1,8 @@
-package ca.estmtl.applets.notre_dame.repository
+package ca.estmtl.applets.notre_dame.whatsnew.repository
 
-import ca.etsmtl.applets.notre_dame.config.common
-import ca.etsmtl.applets.notre_dame.config.whatsNewRepo
-import ca.etsmtl.applets.notre_dame.repository.WhatsNewRepo
+import ca.etsmtl.applets.notre_dame.whatsnew.config.common
+import ca.etsmtl.applets.notre_dame.whatsnew.config.whatsNewRepo
+import ca.etsmtl.applets.notre_dame.whatsnew.repository.WhatsNewRepo
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.util.KtorExperimentalAPI
 import org.junit.Test

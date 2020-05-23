@@ -7,25 +7,24 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.cloud.tools:appengine-gradle-plugin:$appengine_plugin_version"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.1.0'
     }
 }
 
 apply plugin: 'kotlin'
 apply plugin: 'application'
-apply plugin: 'war'
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'com.google.cloud.tools.appengine'
 
-group 'ca.etsmtl.applets.notre_dame'
+group 'ca.etsmtl.applets.notre_dame.whatsnew'
 version '0.0.1'
-mainClassName = "ca.etsmtl.applets.notre_dame.WhatsNewKt"
+mainClassName = "ca.etsmtl.applets.notre_dame.whatsnew.WhatsNewKt"
 
-appengine.deploy.projectId = 'whats-new-api'
-appengine.deploy.version = '0.0.1' //TODO find a way to automatise that
 
 sourceSets {
-    main.kotlin.srcDirs = main.java.srcDirs = ['src']
-    test.kotlin.srcDirs = test.java.srcDirs = ['test']
-    main.resources.srcDirs = ['resources']
+    main.kotlin.srcDirs = ['src/main/kotlin']
+    test.kotlin.srcDirs = ['test']
+    main.resources.srcDirs = ['src/main/resources']
     test.resources.srcDirs = ['testresources']
 }
 
@@ -47,11 +46,12 @@ dependencies {
     compile "org.litote.kmongo:kmongo:3.11.1"
     compile "org.mindrot:jbcrypt:0.4"
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
+
+    // FIRESTORE
+    compile "com.google.cloud:google-cloud-firestore:$firestore_version"
     
     implementation "io.ktor:ktor-locations:$ktor_version"
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
-
-    providedCompile "com.google.appengine:appengine-api-1.0-sdk:$appengine_version"
     
 }
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
@@ -62,13 +62,20 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinTest).all {
     kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlin.Experimental"]
 }
 
-kotlin.experimental.coroutines = 'enable'
-
-task runLocal(dependsOn: appengineRun)
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+appengine {
+    deploy {
+        projectId = "whats-new-api"
+        version = 'GCLOUD_CONFIG' // TODO find a way to automate that
+    }
+    stage {
+        artifact = "build/libs/$project.name-${project.version}-all.jar"
+    }
 }

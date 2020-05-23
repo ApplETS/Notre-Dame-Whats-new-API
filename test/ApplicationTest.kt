@@ -1,7 +1,7 @@
-package ca.estmtl.applets.notre_dame
+package ca.estmtl.applets.notre_dame.whatsnew
 
 
-import ca.etsmtl.applets.notre_dame.main
+import ca.etsmtl.applets.notre_dame.whatsnew.main
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.request.*
