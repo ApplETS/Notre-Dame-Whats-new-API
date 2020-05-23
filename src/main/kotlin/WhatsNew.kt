@@ -3,7 +3,6 @@ package ca.etsmtl.applets.notre_dame.whatsnew
 import ca.etsmtl.applets.notre_dame.whatsnew.config.*
 import ca.etsmtl.applets.notre_dame.whatsnew.repository.UsersRepo
 import ca.etsmtl.applets.notre_dame.whatsnew.server.Server
-import io.ktor.application.Application
 import org.kodein.di.Kodein
 import org.kodein.di.direct
 import org.kodein.di.generic.bind

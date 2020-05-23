@@ -21,7 +21,7 @@ class WhatsNewRepo(private val client: Firestore) {
                 doc.id, doc.data["title"].toString(),
                 doc.data["description"].toString(),
                 doc.data["version"].toString(),
-                doc.data["paddedVersion"] as Double
+                doc.data["paddedVersion"] as Long
             )
         }.toMutableList();
     }
@@ -40,7 +40,7 @@ class WhatsNewRepo(private val client: Firestore) {
                 data?.get("title").toString(),
                 data?.get("description").toString(),
                 data?.get("version").toString(),
-                data?.get("paddedVersion") as Double
+                data?.get("paddedVersion") as Long
             )
         }.toMutableList()
     }
@@ -55,7 +55,7 @@ class WhatsNewRepo(private val client: Firestore) {
                 doc.id, doc.data?.get("title").toString(),
                 doc.data?.get("description").toString(),
                 doc.data?.get("version").toString(),
-                doc.data?.get("paddedVersion") as Double
+                doc.data?.get("paddedVersion") as Long
             )
         else
             null
@@ -69,7 +69,7 @@ class WhatsNewRepo(private val client: Firestore) {
                 doc.id, doc.data["title"].toString(),
                 doc.data["description"].toString(),
                 doc.data["version"].toString(),
-                doc.data["paddedVersion"] as Double
+                doc.data["paddedVersion"] as Long
             )
         }.toMutableList();
     }
@@ -88,7 +88,7 @@ class WhatsNewRepo(private val client: Firestore) {
                 data?.get("title").toString(),
                 data?.get("description").toString(),
                 data?.get("version").toString(),
-                data?.get("paddedVersion") as Double
+                data?.get("paddedVersion") as Long
             )
         }.toMutableList()
     }
@@ -103,7 +103,7 @@ class WhatsNewRepo(private val client: Firestore) {
                 doc.id, doc.data?.get("title").toString(),
                 doc.data?.get("description").toString(),
                 doc.data?.get("version").toString(),
-                doc.data?.get("paddedVersion") as Double
+                doc.data?.get("paddedVersion") as Long
             )
         else
             null
@@ -125,35 +125,34 @@ class WhatsNewRepo(private val client: Firestore) {
         return whatsNewCollectionFr.document(id).delete().get()
     }
 
-    fun getRangeEn(from: Double, to: Double): List<WhatsNew> {
+    fun getRangeEn(from: Long, to: Long): List<WhatsNew> {
         print("there")
         val future = whatsNewCollectionEn.whereGreaterThanOrEqualTo("paddedVersion", from)
             .whereLessThanOrEqualTo("paddedVersion", to).get()
 
-        return future.get().documents.map { doc ->
-            if ((doc.data["paddedVersion"] as Double).rem(10.0) == 0.0)
-                WhatsNew(
-                    doc.id, doc.data["title"].toString(),
-                    doc.data["description"].toString(),
-                    doc.data["version"].toString(),
-                    doc.data["paddedVersion"] as Double
-                )
-        }.toList() as List<WhatsNew>;
+        return future.get().documents.filter { (it.data["paddedVersion"] as Long).rem(10.0) == 0.0 }.map { doc ->
+            WhatsNew(
+                doc.id,
+                doc.data["title"].toString(),
+                doc.data["description"].toString(),
+                doc.data["version"].toString(),
+                doc.data["paddedVersion"] as Long
+            )
+        };
     }
 
-    fun getRangeFr(from: Double, to: Double): List<WhatsNew> {
+    fun getRangeFr(from: Long, to: Long): List<WhatsNew> {
         val future = whatsNewCollectionFr.whereGreaterThanOrEqualTo("paddedVersion", from)
             .whereLessThanOrEqualTo("paddedVersion", to).get()
 
-        return future.get().documents.map { doc ->
-            if ((doc.data["paddedVersion"] as Double).rem(10.0) == 0.0)
-                WhatsNew(
-                    doc.id, doc.data["title"].toString(),
-                    doc.data["description"].toString(),
-                    doc.data["version"].toString(),
-                    doc.data["paddedVersion"] as Double
-                )
-        }.toList() as List<WhatsNew>;
+        return future.get().documents.filter { (it.data["paddedVersion"] as Long).rem(10.0) == 0.0 }.map { doc ->
+            WhatsNew(
+                doc.id, doc.data["title"].toString(),
+                doc.data["description"].toString(),
+                doc.data["version"].toString(),
+                doc.data["paddedVersion"] as Long
+            )
+        };
     }
 
 }

@@ -15,7 +15,7 @@ data class WhatsNew(
     var title: String,
     var description: String,
     val version: String,
-    var paddedVersion: Double
+    var paddedVersion: Long
 ) {
 
     init {
@@ -50,7 +50,7 @@ data class WhatsNew(
     }
 }
 
-fun addPaddingToVersion(version: String): Double {
+fun addPaddingToVersion(version: String): Long {
     var str = ""
     var splittedVersion = version.split('.')
     splittedVersion.forEach {
@@ -59,5 +59,5 @@ fun addPaddingToVersion(version: String): Double {
         }
         str += it
     }
-    return str.toDouble()
+    return str.toLong()
 }
