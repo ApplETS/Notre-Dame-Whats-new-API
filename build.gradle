@@ -43,9 +43,8 @@ dependencies {
     compile "io.ktor:ktor-auth-jwt:$ktor_version"
     compile "io.ktor:ktor-jackson:$ktor_version"
     compile "org.kodein.di:kodein-di-generic-jvm:$kodein_version"
-    compile "org.litote.kmongo:kmongo:3.11.1"
-    compile "org.mindrot:jbcrypt:0.4"
-    compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
+    compile "org.mindrot:jbcrypt:$jbcrypt_version"
+    compile "com.github.salomonbrys.kotson:kotson:$kotson_version"
 
     // FIRESTORE
     compile "com.google.cloud:google-cloud-firestore:$firestore_version"

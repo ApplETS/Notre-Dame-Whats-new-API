@@ -6,11 +6,7 @@ import ca.etsmtl.applets.notre_dame.whatsnew.repository.UsersRepo
 import ca.etsmtl.applets.notre_dame.whatsnew.repository.WhatsNewRepo
 import ca.etsmtl.applets.notre_dame.whatsnew.service.UsersService
 import ca.etsmtl.applets.notre_dame.whatsnew.service.WhatsNewService
-import ca.etsmtl.applets.notre_dame.whatsnew.utils.Property
-import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.firestore.FirestoreOptions
-import com.mongodb.MongoCredential
-import com.mongodb.ServerAddress
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.util.KtorExperimentalAPI
 import org.kodein.di.Kodein
@@ -18,20 +14,9 @@ import org.kodein.di.generic.bind
 import org.kodein.di.generic.eagerSingleton
 import org.kodein.di.generic.instance
 import org.kodein.di.generic.singleton
-import org.litote.kmongo.KMongo
-import java.io.FileInputStream
 
 /*** MongoDb********************************/
 val common = Kodein.Module(name = "common") {
-    /*val databaseName  = Property["db.name"]
-    val databaseUser = Property["db.usernameDb"]
-    val databasePass = Property["db.password"]
-    val credentialList =  ArrayList<MongoCredential>();
-    credentialList.add(MongoCredential.createCredential(databaseUser,databaseName,databasePass.toCharArray()))
-    bind("mongoClient") from singleton { KMongo.createClient( ServerAddress(),credentialList)}*/
-    val dbHost = Property["db.host"]
-    val dbPort: Int = Property["db.port"].toInt()
-    bind("mongoClient") from singleton { KMongo.createClient(dbHost, dbPort) }
     bind("firestore") from singleton {
         FirestoreOptions.getDefaultInstance().service
     }
@@ -55,7 +40,7 @@ val whatsNewSController = Kodein.Module(name = "whatsNewSController") {
 
 /*** Users********************************/
 val usersRepo = Kodein.Module(name = "usersRepo") {
-    bind(tag = "usersRepo") from singleton { UsersRepo(instance("mongoClient")) }
+    bind(tag = "usersRepo") from singleton { UsersRepo(instance("firestore")) }
 }
 
 val usersService = Kodein.Module(name = "usersService") {
