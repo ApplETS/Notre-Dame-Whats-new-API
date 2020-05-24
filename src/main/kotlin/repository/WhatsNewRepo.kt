@@ -17,12 +17,7 @@ class WhatsNewRepo(private val client: Firestore) {
         val future = whatsNewCollectionEn.whereEqualTo("version", version).get()
 
         return future.get().documents.map { doc ->
-            WhatsNew(
-                doc.id, doc.data["title"].toString(),
-                doc.data["description"].toString(),
-                doc.data["version"].toString(),
-                doc.data["paddedVersion"] as Long
-            )
+            WhatsNew(doc.id, doc.data)
         }.toMutableList();
     }
 
@@ -51,12 +46,11 @@ class WhatsNewRepo(private val client: Firestore) {
         val doc = future.get().get()
 
         return if (doc.exists())
-            WhatsNew(
-                doc.id, doc.data?.get("title").toString(),
-                doc.data?.get("description").toString(),
-                doc.data?.get("version").toString(),
-                doc.data?.get("paddedVersion") as Long
-            )
+            doc.data?.let {
+                WhatsNew(
+                    doc.id, it
+                )
+            }
         else
             null
     }
@@ -65,12 +59,7 @@ class WhatsNewRepo(private val client: Firestore) {
         val future = whatsNewCollectionFr.whereEqualTo("version", version).get()
 
         return future.get().documents.map { doc ->
-            WhatsNew(
-                doc.id, doc.data["title"].toString(),
-                doc.data["description"].toString(),
-                doc.data["version"].toString(),
-                doc.data["paddedVersion"] as Long
-            )
+            WhatsNew(doc.id, doc.data)
         }.toMutableList();
     }
 
@@ -99,12 +88,11 @@ class WhatsNewRepo(private val client: Firestore) {
         val doc = future.get().get()
 
         return if (doc.exists())
-            WhatsNew(
-                doc.id, doc.data?.get("title").toString(),
-                doc.data?.get("description").toString(),
-                doc.data?.get("version").toString(),
-                doc.data?.get("paddedVersion") as Long
-            )
+            doc.data?.let {
+                WhatsNew(
+                    doc.id, it
+                )
+            }
         else
             null
     }
@@ -130,13 +118,7 @@ class WhatsNewRepo(private val client: Firestore) {
             .whereLessThanOrEqualTo("paddedVersion", to).get()
 
         return future.get().documents.filter { (it.data["paddedVersion"] as Long).rem(10.0) == 0.0 }.map { doc ->
-            WhatsNew(
-                doc.id,
-                doc.data["title"].toString(),
-                doc.data["description"].toString(),
-                doc.data["version"].toString(),
-                doc.data["paddedVersion"] as Long
-            )
+            WhatsNew(doc.id, doc.data)
         };
     }
 
@@ -145,12 +127,7 @@ class WhatsNewRepo(private val client: Firestore) {
             .whereLessThanOrEqualTo("paddedVersion", to).get()
 
         return future.get().documents.filter { (it.data["paddedVersion"] as Long).rem(10.0) == 0.0 }.map { doc ->
-            WhatsNew(
-                doc.id, doc.data["title"].toString(),
-                doc.data["description"].toString(),
-                doc.data["version"].toString(),
-                doc.data["paddedVersion"] as Long
-            )
+            WhatsNew(doc.id, doc.data)
         };
     }
 

@@ -89,8 +89,6 @@ class WhatsNewService(val repo: WhatsNewRepo) {
     }
 
     fun getByVersionRangeEn(paddedVersionFrom: Long, paddedVersionTo: Long): MutableList<WhatsNewToReturn> {
-        print("From: " + paddedVersionFrom);
-        print("To: " + paddedVersionTo);
         val foundObjs = repo.getRangeEn(paddedVersionFrom, paddedVersionTo)
         var objectsToReturn: MutableList<WhatsNewToReturn> = ArrayList<WhatsNewToReturn>()
         foundObjs.forEach {

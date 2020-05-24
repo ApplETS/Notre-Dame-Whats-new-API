@@ -17,6 +17,12 @@ data class WhatsNew(
     val version: String,
     var paddedVersion: Long
 ) {
+    constructor(_id: String, data: Map<String, Any>) : this(
+        _id, data["title"].toString(),
+        data["description"].toString(),
+        data["version"].toString(),
+        data["paddedVersion"] as Long
+    )
 
     init {
         for (prop in WhatsNew::class.memberProperties) {
@@ -46,7 +52,12 @@ data class WhatsNew(
     }
 
     fun toMapUpdate(): Map<String, Any> {
-        return mapOf("title" to title, "description" to description, "version" to version, "paddedVersion" to paddedVersion);
+        return mapOf(
+            "title" to title,
+            "description" to description,
+            "version" to version,
+            "paddedVersion" to paddedVersion
+        );
     }
 }
 
