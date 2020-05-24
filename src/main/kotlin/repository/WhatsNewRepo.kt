@@ -126,7 +126,6 @@ class WhatsNewRepo(private val client: Firestore) {
     }
 
     fun getRangeEn(from: Long, to: Long): List<WhatsNew> {
-        print("there")
         val future = whatsNewCollectionEn.whereGreaterThanOrEqualTo("paddedVersion", from)
             .whereLessThanOrEqualTo("paddedVersion", to).get()
 

@@ -62,6 +62,12 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinTest).all {
     kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlin.Experimental"]
 }
 
+shadowJar {
+    mergeServiceFiles {
+        setPath("META-INF/services")
+        include("io.grpc.*")
+    }
+}
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
