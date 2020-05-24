@@ -4,8 +4,6 @@ import ca.etsmtl.applets.notre_dame.whatsnew.ApiExceptions.BadWhatsNewFormat
 import io.ktor.features.BadRequestException
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
-import org.litote.kmongo.Id
-import org.litote.kmongo.newId
 import kotlin.reflect.full.memberProperties
 
 @KtorExperimentalLocationsAPI
