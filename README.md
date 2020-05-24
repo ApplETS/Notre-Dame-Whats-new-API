@@ -1,3 +1,7 @@
 # Notre-Dame What's new API
 
-TODO
+## Getting Started
+
+### Requirements
+
+- Avoid a service account into GCP (contact the captain of App|ETS) or setting up your own GCP project
