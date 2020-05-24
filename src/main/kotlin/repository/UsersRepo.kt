@@ -3,56 +3,59 @@ package ca.etsmtl.applets.notre_dame.whatsnew.repository
 import ca.etsmtl.applets.notre_dame.whatsnew.model.User
 import ca.etsmtl.applets.notre_dame.whatsnew.model.UserProfile
 import ca.etsmtl.applets.notre_dame.whatsnew.utils.Property
-import com.mongodb.MongoClient
-import com.mongodb.client.model.Updates
-import com.mongodb.client.result.DeleteResult
-import com.mongodb.client.result.UpdateResult
-import org.litote.kmongo.*
+import ca.etsmtl.applets.notre_dame.whatsnew.utils.Roles
+import com.google.cloud.firestore.Firestore
+import com.google.cloud.firestore.WriteResult
 
-class UsersRepo (private val client: MongoClient) {
-    private val databaseName  = Property["db.name"]
-    private val usersCollName = Property["db.usersCollection"]
-    private val usersCollection = client.getDatabase(databaseName).getCollection<User>(usersCollName)
+class UsersRepo(private val client: Firestore) {
+    private val usersCollection = client.collection(Property["db.usersCollection"])
 
-    fun addUser ( userOb : User) :Unit
-    {
-        return usersCollection.insertOne(userOb)
+    fun addUser(userOb: User): Unit {
+        usersCollection.add(userOb)
     }
 
-    fun getAllUsers() : MutableList<UserProfile>
-    {
-      var users= usersCollection.find().toMutableList();
-      var usersProfiles : MutableList<UserProfile> =  ArrayList()
-      for ( user in users)
-      {
-          usersProfiles.add(user.convertToUserProfile())
-      }
-        return usersProfiles
+    fun getAllUsers(): MutableList<UserProfile> {
+        return usersCollection.listDocuments().map {
+            val doc = it.get().get();
+
+            User(
+                doc.id,
+                doc.data?.get("userName").toString(),
+                Roles.valueOf(doc.data?.get("role").toString()),
+                doc.data?.get("password").toString(),
+                doc.data?.get("token").toString()
+            ).convertToUserProfile()
+        }.toMutableList()
     }
 
-    fun findByUserName ( userName : String) : User?
-    {
-        return usersCollection.findOne(User::userName eq userName)
+    fun findByUserName(userName: String): User? {
+        val future = usersCollection.whereEqualTo("userName", userName).limit(1).get()
+        val doc = future.get()
+
+        return if (doc.isEmpty)
+            null
+        else
+            User(doc.documents[0].id, doc.documents[0].data)
     }
 
-    fun findById ( id : Id<User>) : User?
-    {
-        return usersCollection.findOne(User::_id eq id)
+    fun findById(id: String): User? {
+        val doc = usersCollection.document(id).get().get()
+
+        return if(doc.exists())
+            doc.data?.let { User(doc.id, it) }
+        else
+            null
     }
 
-    fun updateUserToken( user :User): UpdateResult
-    {
-        return usersCollection.updateOne( User::_id eq user._id, Updates.set("token", user.token))
-
+    fun updateUserToken(user: User): WriteResult {
+        return usersCollection.document(user._id).update("token", user.token).get()
     }
 
-    fun deleteUserById ( id : Id<User>) : DeleteResult
-    {
-        return usersCollection.deleteOne(User ::_id eq id)
+    fun deleteUserById(id: String): WriteResult {
+        return usersCollection.document(id).delete().get()
     }
 
-    fun updateUser (user: User) : UpdateResult
-    {
-        return usersCollection.updateOne(user)
+    fun updateUser(user: User): WriteResult {
+        return usersCollection.document(user._id).update(user.toMapUpdate()).get()
     }
 }
