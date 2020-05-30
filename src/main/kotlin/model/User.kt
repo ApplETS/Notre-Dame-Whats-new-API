@@ -39,7 +39,7 @@ data class User(
     }
 
     fun convertToUserProfile(): UserProfile {
-        return UserProfile(this._id.toString(), this.userName, this.role)
+        return UserProfile(this._id, this.userName, this.role)
     }
 
     fun patchUser(other: UserPatch) {

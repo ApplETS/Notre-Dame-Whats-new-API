@@ -19,13 +19,14 @@ data class WhatsNew(
         _id, data["title"].toString(),
         data["description"].toString(),
         data["version"].toString(),
-        data["paddedVersion"] as Long
+        data["paddedVersion"].toString().toLong()
     )
 
     init {
         for (prop in WhatsNew::class.memberProperties) {
+            var propName = prop.name
             var propVal = prop.get(this)
-            if (propVal is String) {
+            if (propVal is String && propName != "_id") {
                 if (propVal.toString().isBlank())
                     throw BadWhatsNewFormat
             }
@@ -46,7 +47,7 @@ data class WhatsNew(
     }
 
     fun toWhatsNewToReturn(): WhatsNewToReturn {
-        return WhatsNewToReturn(this._id.toString(), this.title, this.description, this.version)
+        return WhatsNewToReturn(this._id, this.title, this.description, this.version)
     }
 
     fun toMapUpdate(): Map<String, Any> {
