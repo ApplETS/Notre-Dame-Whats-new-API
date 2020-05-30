@@ -23,6 +23,6 @@ jobs:
       with:
         service_account_key: ${{ secrets.GCP_AUTH }}
         export_default_credentials: true
-    - run: gcloud info
+    - run: gcloud auth login
     - name: Build and deploy
       run: ./gradlew clean build appengineDeploy
