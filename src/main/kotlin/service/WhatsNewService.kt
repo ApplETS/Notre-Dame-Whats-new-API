@@ -26,13 +26,13 @@ class WhatsNewService(val repo: WhatsNewRepo) {
         return repo.addWhatNewEn(whatsNewOb)
     }
 
-    fun getAllWhatsNewEn(): MutableList<WhatsNew> {
+    fun getAllWhatsNewEn(): MutableList<WhatsNewToReturn> {
         val foundObjs = repo.getAllWhatsNew("en")
         var objectsToReturn: MutableList<WhatsNewToReturn> = ArrayList<WhatsNewToReturn>()
         foundObjs.forEach {
             objectsToReturn.add(it.toWhatsNewToReturn())
         }
-        return foundObjs
+        return objectsToReturn
     }
 
     fun getByVersionFr(version: String): MutableList<WhatsNewToReturn> {
