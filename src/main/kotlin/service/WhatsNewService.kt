@@ -87,13 +87,13 @@ class WhatsNewService(val repo: WhatsNewRepo) {
         return repo.deleteWhatsNewFr(id)
     }
 
-    fun getByVersionRangeEn(paddedVersionFrom: Long, paddedVersionTo: Long): List<WhatsNew> {
+    fun getByVersionRangeEn(paddedVersionFrom: Long, paddedVersionTo: Long): List<WhatsNewToReturn> {
         val foundObjs = repo.getRange("en",paddedVersionFrom, paddedVersionTo)
         var objectsToReturn: MutableList<WhatsNewToReturn> = ArrayList<WhatsNewToReturn>()
         foundObjs.forEach {
             objectsToReturn.add(it.toWhatsNewToReturn())
         }
-        return foundObjs
+        return objectsToReturn
     }
 
     fun getByVersionRangeFr(paddedVersionFrom: Long, paddedVersionTo: Long): MutableList<WhatsNewToReturn> {
