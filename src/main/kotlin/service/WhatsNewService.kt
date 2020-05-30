@@ -26,13 +26,13 @@ class WhatsNewService(val repo: WhatsNewRepo) {
         return repo.addWhatNewEn(whatsNewOb)
     }
 
-    fun getAllWhatsNewEn(): MutableList<WhatsNewToReturn> {
-        val foundObjs = repo.getAllWhatsNewEn()
+    fun getAllWhatsNewEn(): MutableList<WhatsNew> {
+        val foundObjs = repo.getAllWhatsNew("en")
         var objectsToReturn: MutableList<WhatsNewToReturn> = ArrayList<WhatsNewToReturn>()
         foundObjs.forEach {
             objectsToReturn.add(it.toWhatsNewToReturn())
         }
-        return objectsToReturn
+        return foundObjs
     }
 
     fun getByVersionFr(version: String): MutableList<WhatsNewToReturn> {
@@ -49,7 +49,7 @@ class WhatsNewService(val repo: WhatsNewRepo) {
     }
 
     fun getAllWhatsNewFr(): MutableList<WhatsNewToReturn> {
-        val foundObjs = repo.getAllWhatsNewFr()
+        val foundObjs = repo.getAllWhatsNew("fr")
         var objectsToReturn: MutableList<WhatsNewToReturn> = ArrayList<WhatsNewToReturn>()
         foundObjs.forEach {
             objectsToReturn.add(it.toWhatsNewToReturn())
@@ -57,7 +57,7 @@ class WhatsNewService(val repo: WhatsNewRepo) {
         return objectsToReturn
     }
 
-    fun getWhatsNewEn(id: String): WhatsNew? {
+    private fun getWhatsNewEn(id: String): WhatsNew? {
         return repo.findByIdEn(id)
     }
 
@@ -68,10 +68,9 @@ class WhatsNewService(val repo: WhatsNewRepo) {
         return repo.updateWhatsNewEn(whatsNewToUpdate)
     }
 
-    fun getWhatsNewFr(id: String): WhatsNew? {
+    private fun getWhatsNewFr(id: String): WhatsNew? {
         return repo.findByIdFr(id)
     }
-
 
     fun updateWhatsNewFr(patchedWhatsNewFr: WhatsNewPatch, id: String): WriteResult {
         var whatsNewToUpdate = this.getWhatsNewFr(id)
@@ -88,17 +87,17 @@ class WhatsNewService(val repo: WhatsNewRepo) {
         return repo.deleteWhatsNewFr(id)
     }
 
-    fun getByVersionRangeEn(paddedVersionFrom: Long, paddedVersionTo: Long): MutableList<WhatsNewToReturn> {
-        val foundObjs = repo.getRangeEn(paddedVersionFrom, paddedVersionTo)
+    fun getByVersionRangeEn(paddedVersionFrom: Long, paddedVersionTo: Long): List<WhatsNew> {
+        val foundObjs = repo.getRange("en",paddedVersionFrom, paddedVersionTo)
         var objectsToReturn: MutableList<WhatsNewToReturn> = ArrayList<WhatsNewToReturn>()
         foundObjs.forEach {
             objectsToReturn.add(it.toWhatsNewToReturn())
         }
-        return objectsToReturn
+        return foundObjs
     }
 
     fun getByVersionRangeFr(paddedVersionFrom: Long, paddedVersionTo: Long): MutableList<WhatsNewToReturn> {
-        val foundObjs = repo.getRangeFr(paddedVersionFrom, paddedVersionTo)
+        val foundObjs = repo.getRange("fr",paddedVersionFrom, paddedVersionTo)
         var objectsToReturn: MutableList<WhatsNewToReturn> = ArrayList<WhatsNewToReturn>()
         foundObjs.forEach {
             objectsToReturn.add(it.toWhatsNewToReturn())

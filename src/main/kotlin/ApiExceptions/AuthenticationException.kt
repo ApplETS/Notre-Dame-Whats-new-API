@@ -10,4 +10,4 @@ val WrongPassword = AuthenticationException(HttpStatusCode.Unauthorized, "Wrong 
 val UserAlreadyExists = AuthenticationException(HttpStatusCode.Conflict, "The specified user already exists")
 
 val BadUserFormat = AuthenticationException(HttpStatusCode.BadRequest, "User's fields can not have empty strings")
-val BadWhatsNewFormat = AuthenticationException(HttpStatusCode.BadRequest, "Whats new fields canty strings")
+val BadWhatsNewFormat = AuthenticationException(HttpStatusCode.BadRequest, "Whats new fields can not have empty strings")
